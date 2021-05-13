@@ -32,6 +32,10 @@ Specifically, this dashboard app features CRUD functionality on a Project entiti
 
 The home page shows all projects and their current property values.
 
+## See It Live
+
+[Visit Project Dashboard](https://levelup-angular-04-projects.surge.sh/)
+
 ## Getting Started
 
 Run `npm install`.
