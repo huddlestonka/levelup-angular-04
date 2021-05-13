@@ -9,6 +9,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "deploy": "ng build --prod && cp ./dist/apps/dashboard/index.html ./dist/apps/dashboard/200.html && npx surge ./dist/apps/dashboard/ https://levelup-angular-04-projects.surge.sh",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
     "affected:apps": "nx affected:apps",
