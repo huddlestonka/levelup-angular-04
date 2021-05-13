@@ -1,1 +1,23 @@
-<p>home works!</p>
+<div class="home-container" data-cy="home-project-cards">
+  <mat-card
+    *ngFor="let project of projects$ | async"
+    attr.data-cy="home-project-{{ project.id }}-card"
+  >
+    <mat-card-header>
+      <mat-card-title attr.data-cy="home-project-{{ project.id }}-title">
+        {{ project.title }}
+      </mat-card-title>
+      <mat-card-subtitle>{{ project.details }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Approved: {{ project.approved }}</p>
+      <mat-card-footer
+        >% Complete
+        <mat-progress-bar
+          mode="determinate"
+          value="{{ project.percentComplete }}"
+        ></mat-progress-bar
+      ></mat-card-footer>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -3,29 +3,29 @@
     {
       "id": "965f68e6-b1f9-4321-b583-97798c9cb03c",
       "title": "User Dashboard",
-      "details": "TBD",
+      "details": "Perform CRUD operations on Users",
       "percentComplete": 100,
       "approved": false
     },
     {
       "id": "e8f6945a-f059-4f5d-ad7c-6b3763d92a70",
       "title": "Artist Dashboard",
-      "details": "TBD",
+      "details": "Perform CRUD operations on Artists",
       "percentComplete": 90,
       "approved": false
     },
     {
       "id": "4c169e3a-6924-44fc-98d0-86c885741a0f",
       "title": "Customer Order Dashboard",
-      "details": "TBD",
+      "details": "CRUD on Customers/Orders and view/assign Customer/Orders",
       "percentComplete": 100,
       "approved": false
     },
     {
       "id": "e69753ef-4204-4a81-9324-a081422799f4",
       "title": "Projects Dashboard",
-      "details": "TBD",
-      "percentComplete": 100,
+      "details": "Nx Ng NgRx Basic App Speed Test",
+      "percentComplete": 90,
       "approved": false
     },
     {
