@@ -8,10 +8,26 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDetailsComponent } from './projects/project-details/project-details.component';
 import { ProjectsListComponent } from './projects/projects-list/projects-list.component';
 import { HomeComponent } from './home/home.component';
+import { MaterialModule } from '@bba/material';
+import { RoutingModule } from './routing.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, ProjectsComponent, ProjectDetailsComponent, ProjectsListComponent, HomeComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, StoreModule.forRoot({}, {})],
+  declarations: [
+    AppComponent,
+    ProjectsComponent,
+    ProjectDetailsComponent,
+    ProjectsListComponent,
+    HomeComponent,
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    RoutingModule,
+    FormsModule,
+    StoreModule.forRoot({}, {}),
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
