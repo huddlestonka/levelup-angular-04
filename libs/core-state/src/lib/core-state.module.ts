@@ -1,20 +1,31 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StoreModule } from '@ngrx/store';
+import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
-import * as fromProjects from './projects/projects.reducer';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RootStoreConfig, StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+import { reducers } from '.';
+
 import { ProjectsEffects } from './projects/projects.effects';
-import { ProjectsFacade } from './projects/projects.facade';
+
+const STORE_NAME = 'bba-store';
+const storeConfig: RootStoreConfig<any> = {
+  runtimeChecks: {
+    strictActionImmutability: true,
+    strictActionSerializability: true,
+    strictStateImmutability: true,
+    strictStateSerializability: true,
+  },
+};
 
 @NgModule({
   imports: [
     CommonModule,
-    StoreModule.forFeature(
-      fromProjects.PROJECTS_FEATURE_KEY,
-      fromProjects.reducer
-    ),
-    EffectsModule.forFeature([ProjectsEffects]),
+    StoreModule.forRoot(reducers, storeConfig),
+    EffectsModule.forRoot([ProjectsEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, name: STORE_NAME }),
+    StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
   ],
-  providers: [ProjectsFacade],
 })
 export class CoreStateModule {}

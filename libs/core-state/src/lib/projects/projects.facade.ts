@@ -1,28 +1,65 @@
 import { Injectable } from '@angular/core';
-
-import { select, Store, Action } from '@ngrx/store';
-
+import { Project } from '@bba/api-interfaces';
+import { Action, ActionsSubject, select, Store } from '@ngrx/store';
+import { filter } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import * as ProjectsActions from './projects.actions';
-import * as ProjectsFeature from './projects.reducer';
+import * as fromProjects from './projects.reducer';
 import * as ProjectsSelectors from './projects.selectors';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ProjectsFacade {
-  /**
-   * Combine pieces of state using createSelector,
-   * and expose them as observables through the facade.
-   */
   loaded$ = this.store.pipe(select(ProjectsSelectors.getProjectsLoaded));
   allProjects$ = this.store.pipe(select(ProjectsSelectors.getAllProjects));
-  selectedProjects$ = this.store.pipe(select(ProjectsSelectors.getSelected));
+  selectedProject$ = this.store.pipe(
+    select(ProjectsSelectors.getSelectedProject)
+  );
 
-  constructor(private store: Store) {}
+  mutations$ = this.actions$.pipe(
+    filter(
+      (action: Action) =>
+        action.type === ProjectsActions.createProject({} as any).type ||
+        action.type === ProjectsActions.updateProject({} as any).type ||
+        action.type === ProjectsActions.deleteProject({} as any).type
+    )
+  );
 
-  /**
-   * Use the initialization action to perform one
-   * or more tasks in your Effects.
-   */
-  init() {
-    this.store.dispatch(ProjectsActions.init());
+  constructor(
+    private store: Store<fromProjects.ProjectsPartialState>,
+    private actions$: ActionsSubject
+  ) {}
+
+  selectProject(selectedId: string) {
+    this.dispatch(ProjectsActions.selectProject({ selectedId }));
+  }
+
+  loadProjects() {
+    this.dispatch(ProjectsActions.loadProjects());
+  }
+
+  loadProject(projectId: string) {
+    this.dispatch(ProjectsActions.loadProject({ projectId }));
+  }
+
+  createProject(project: Project) {
+    this.dispatch(
+      ProjectsActions.createProject({
+        project: Object.assign({}, project, { id: uuidv4() }),
+      })
+    );
+  }
+
+  updateProject(project: Project) {
+    this.dispatch(ProjectsActions.updateProject({ project }));
+  }
+
+  deleteProject(project: Project) {
+    this.dispatch(ProjectsActions.deleteProject({ project }));
+  }
+
+  dispatch(action: Action) {
+    this.store.dispatch(action);
   }
 }

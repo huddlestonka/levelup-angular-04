@@ -1,45 +1,55 @@
+import { Project } from '@bba/api-interfaces';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   PROJECTS_FEATURE_KEY,
-  State,
-  ProjectsPartialState,
+  ProjectsState,
   projectsAdapter,
 } from './projects.reducer';
 
 // Lookup the 'Projects' feature state managed by NgRx
-export const getProjectsState = createFeatureSelector<
-  ProjectsPartialState,
-  State
->(PROJECTS_FEATURE_KEY);
+export const getProjectsState = createFeatureSelector<ProjectsState>(
+  PROJECTS_FEATURE_KEY
+);
 
 const { selectAll, selectEntities } = projectsAdapter.getSelectors();
 
 export const getProjectsLoaded = createSelector(
   getProjectsState,
-  (state: State) => state.loaded
+  (state: ProjectsState) => state.loaded
 );
 
 export const getProjectsError = createSelector(
   getProjectsState,
-  (state: State) => state.error
+  (state: ProjectsState) => state.error
 );
 
-export const getAllProjects = createSelector(getProjectsState, (state: State) =>
-  selectAll(state)
+export const getAllProjects = createSelector(
+  getProjectsState,
+  (state: ProjectsState) => selectAll(state)
 );
 
 export const getProjectsEntities = createSelector(
   getProjectsState,
-  (state: State) => selectEntities(state)
+  (state: ProjectsState) => selectEntities(state)
 );
 
-export const getSelectedId = createSelector(
+export const getSelectedProjectId = createSelector(
   getProjectsState,
-  (state: State) => state.selectedId
+  (state: ProjectsState) => state.selectedId
 );
 
-export const getSelected = createSelector(
+export const getSelectedProject = createSelector(
   getProjectsEntities,
-  getSelectedId,
-  (entities, selectedId) => selectedId && entities[selectedId]
+  getSelectedProjectId,
+  (entities, selectedId) => {
+    const emptyProject: Project = {
+      id: '',
+      title: '',
+      details: '',
+      percentComplete: 0,
+      approved: false,
+    };
+
+    return selectedId ? entities[selectedId] : emptyProject;
+  }
 );

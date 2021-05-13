@@ -1,1 +1,73 @@
-<p>project-details works!</p>
+<mat-card>
+  <mat-card-title data-cy="project-details-title">
+    <span *ngIf="currentProject.id; else elseBlock">
+      Editing {{ originalTitle }}
+    </span>
+    <ng-template #elseBlock> Select Project </ng-template>
+  </mat-card-title>
+  <form
+    #form="ngForm"
+    (submit)="saved.emit(currentProject)"
+    data-cy="project-form"
+  >
+    <mat-card-content>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Title"
+          data-cy="project-form-title"
+          [(ngModel)]="currentProject.title"
+          type="text"
+          name="title"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Details"
+          data-cy="project-form-details"
+          [(ngModel)]="currentProject.details"
+          type="text"
+          name="details"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Percent Complete"
+          data-cy="project-form-percent-complete"
+          [(ngModel)]="currentProject.percentComplete"
+          type="number"
+          name="percentComplete"
+          required
+        />
+      </mat-form-field>
+      <section class="full-width">
+        <mat-checkbox [(ngModel)]="currentProject.approved" name="approved"
+          >Approved</mat-checkbox
+        >
+      </section>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        [disabled]="form.invalid"
+        type="submit"
+        mat-button
+        color="primary"
+        data-cy="project-form-save"
+      >
+        Save
+      </button>
+      <button
+        type="button"
+        mat-button
+        (click)="form.reset(); cancelled.emit()"
+        data-cy="project-form-cancel"
+      >
+        Cancel
+      </button>
+    </mat-card-actions>
+  </form>
+</mat-card>

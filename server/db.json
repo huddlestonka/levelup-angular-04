@@ -1,0 +1,60 @@
+{
+  "projects": [
+    {
+      "id": "965f68e6-b1f9-4321-b583-97798c9cb03c",
+      "title": "User Dashboard",
+      "details": "TBD",
+      "percentComplete": 100,
+      "approved": false
+    },
+    {
+      "id": "e8f6945a-f059-4f5d-ad7c-6b3763d92a70",
+      "title": "Artist Dashboard",
+      "details": "TBD",
+      "percentComplete": 90,
+      "approved": false
+    },
+    {
+      "id": "4c169e3a-6924-44fc-98d0-86c885741a0f",
+      "title": "Customer Order Dashboard",
+      "details": "TBD",
+      "percentComplete": 100,
+      "approved": false
+    },
+    {
+      "id": "e69753ef-4204-4a81-9324-a081422799f4",
+      "title": "Projects Dashboard",
+      "details": "TBD",
+      "percentComplete": 100,
+      "approved": false
+    },
+    {
+      "id": "2d553ba3-aa74-433e-b4e0-7b7b6bc63d40",
+      "title": "App #5",
+      "details": "TBD",
+      "percentComplete": 0,
+      "approved": false
+    },
+    {
+      "id": "676e1031-20b9-4934-8e0a-f68ac08d0b6a",
+      "title": "App #6",
+      "details": "TBD",
+      "percentComplete": 0,
+      "approved": false
+    },
+    {
+      "id": "4f3a3592-2c8a-4414-a3c3-e77eddd35b21",
+      "title": "App #7",
+      "details": "TBD",
+      "percentComplete": 0,
+      "approved": false
+    },
+    {
+      "id": "613eba65-ce65-4cc2-922c-a7a735a1d2b5",
+      "title": "App #8",
+      "details": "TBD",
+      "percentComplete": 0,
+      "approved": false
+    }
+  ]
+}
