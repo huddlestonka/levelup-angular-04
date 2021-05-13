@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { MaterialModule } from '@bba/material';
 import { RoutingModule } from './routing.module';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
     RoutingModule,
