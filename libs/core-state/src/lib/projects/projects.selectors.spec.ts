@@ -1,15 +1,18 @@
-import { ProjectsEntity } from './projects.models';
-import { State, projectsAdapter, initialState } from './projects.reducer';
+import {
+  ProjectsState,
+  projectsAdapter,
+  initialProjectsState,
+} from './projects.reducer';
 import * as ProjectsSelectors from './projects.selectors';
+
+import { Project } from '@bba/api-interfaces';
+import { mockProject } from '@bba/testing';
 
 describe('Projects Selectors', () => {
   const ERROR_MSG = 'No Error Available';
   const getProjectsId = (it) => it['id'];
-  const createProjectsEntity = (id: string, name = '') =>
-    ({
-      id,
-      name: name || `name-${id}`,
-    } as ProjectsEntity);
+  const createProject = (id: string, name = '') =>
+    ({ ...mockProject, id: id } as Project);
 
   let state;
 
@@ -17,12 +20,12 @@ describe('Projects Selectors', () => {
     state = {
       projects: projectsAdapter.setAll(
         [
-          createProjectsEntity('PRODUCT-AAA'),
-          createProjectsEntity('PRODUCT-BBB'),
-          createProjectsEntity('PRODUCT-CCC'),
+          createProject('PRODUCT-AAA'),
+          createProject('PRODUCT-BBB'),
+          createProject('PRODUCT-CCC'),
         ],
         {
-          ...initialState,
+          ...initialProjectsState,
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
@@ -41,7 +44,7 @@ describe('Projects Selectors', () => {
     });
 
     it('getSelected() should return the selected Entity', () => {
-      const result = ProjectsSelectors.getSelected(state);
+      const result = ProjectsSelectors.getSelectedProject(state);
       const selId = getProjectsId(result);
 
       expect(selId).toBe('PRODUCT-BBB');

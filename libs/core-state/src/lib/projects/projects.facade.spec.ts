@@ -1,121 +1,116 @@
-import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { readFirst } from '@nrwl/angular/testing';
+import { ActionsSubject } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule, Store } from '@ngrx/store';
-
-import { NxModule } from '@nrwl/angular';
-
-import { ProjectsEntity } from './projects.models';
-import { ProjectsEffects } from './projects.effects';
 import { ProjectsFacade } from './projects.facade';
-
-import * as ProjectsSelectors from './projects.selectors';
 import * as ProjectsActions from './projects.actions';
-import {
-  PROJECTS_FEATURE_KEY,
-  State,
-  initialState,
-  reducer,
-} from './projects.reducer';
+import { initialProjectsState } from './projects.reducer';
 
-interface TestSchema {
-  projects: State;
-}
+import { mockProject } from '@bba/testing';
 
 describe('ProjectsFacade', () => {
   let facade: ProjectsFacade;
-  let store: Store<TestSchema>;
-  const createProjectsEntity = (id: string, name = '') =>
-    ({
-      id,
-      name: name || `name-${id}`,
-    } as ProjectsEntity);
+  let actionSubject;
+  const mockActionsSubject = new ActionsSubject();
+  let store: MockStore;
 
-  beforeEach(() => {});
-
-  describe('used in NgModule', () => {
-    beforeEach(() => {
-      @NgModule({
-        imports: [
-          StoreModule.forFeature(PROJECTS_FEATURE_KEY, reducer),
-          EffectsModule.forFeature([ProjectsEffects]),
-        ],
-        providers: [ProjectsFacade],
-      })
-      class CustomFeatureModule {}
-
-      @NgModule({
-        imports: [
-          NxModule.forRoot(),
-          StoreModule.forRoot({}),
-          EffectsModule.forRoot([]),
-          CustomFeatureModule,
-        ],
-      })
-      class RootModule {}
-      TestBed.configureTestingModule({ imports: [RootModule] });
-
-      store = TestBed.inject(Store);
-      facade = TestBed.inject(ProjectsFacade);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        ProjectsFacade,
+        provideMockStore({ initialState: initialProjectsState }),
+        { provide: ActionsSubject, useValue: mockActionsSubject },
+      ],
     });
 
-    /**
-     * The initially generated facade::loadAll() returns empty array
-     */
-    it('loadAll() should return empty list with loaded == true', async (done) => {
-      try {
-        let list = await readFirst(facade.allProjects$);
-        let isLoaded = await readFirst(facade.loaded$);
+    facade = TestBed.inject(ProjectsFacade);
+    actionSubject = TestBed.inject(ActionsSubject);
+    store = TestBed.inject(MockStore);
+  });
 
-        expect(list.length).toBe(0);
-        expect(isLoaded).toBe(false);
+  it('should be created', () => {
+    expect(facade).toBeTruthy();
+  });
 
-        facade.init();
+  it('should have mutations', (done) => {
+    const action = ProjectsActions.createProject({ project: mockProject });
+    actionSubject.next(action);
 
-        list = await readFirst(facade.allProjects$);
-        isLoaded = await readFirst(facade.loaded$);
+    facade.mutations$.subscribe((result) => {
+      expect(result).toBe(action);
+      done();
+    });
+  });
 
-        expect(list.length).toBe(0);
-        expect(isLoaded).toBe(true);
+  describe('should dispatch', () => {
+    it('select on select(project.id)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-        done();
-      } catch (err) {
-        done.fail(err);
-      }
+      facade.selectProject(mockProject.id);
+
+      const action = ProjectsActions.selectProject({
+        selectedId: mockProject.id,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
     });
 
-    /**
-     * Use `loadProjectsSuccess` to manually update list
-     */
-    it('allProjects$ should return the loaded list; and loaded flag == true', async (done) => {
-      try {
-        let list = await readFirst(facade.allProjects$);
-        let isLoaded = await readFirst(facade.loaded$);
+    it('loadProjects on loadProjects()', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-        expect(list.length).toBe(0);
-        expect(isLoaded).toBe(false);
+      facade.loadProjects();
 
-        store.dispatch(
-          ProjectsActions.loadProjectsSuccess({
-            projects: [
-              createProjectsEntity('AAA'),
-              createProjectsEntity('BBB'),
-            ],
-          })
-        );
+      const action = ProjectsActions.loadProjects();
 
-        list = await readFirst(facade.allProjects$);
-        isLoaded = await readFirst(facade.loaded$);
+      expect(spy).toHaveBeenCalledWith(action);
+    });
 
-        expect(list.length).toBe(2);
-        expect(isLoaded).toBe(true);
+    it('loadProject on loadProject(project.id)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-        done();
-      } catch (err) {
-        done.fail(err);
-      }
+      facade.loadProject(mockProject.id);
+
+      const action = ProjectsActions.loadProject({
+        projectId: mockProject.id,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('createProject on createProject(project)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.createProject(mockProject);
+
+      const action = ProjectsActions.createProject({
+        project: mockProject,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('updateProject on updateProject(project)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.updateProject(mockProject);
+
+      const action = ProjectsActions.updateProject({
+        project: mockProject,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('delete on delete(model)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.deleteProject(mockProject);
+
+      const action = ProjectsActions.deleteProject({
+        project: mockProject,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
     });
   });
 });
