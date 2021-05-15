@@ -12,7 +12,7 @@
     <mat-card-content>
       <p>Approved: {{ project.approved }}</p>
       <mat-card-footer
-        >% Complete
+        >{{ project.percentComplete }}% Complete
         <mat-progress-bar
           mode="determinate"
           value="{{ project.percentComplete }}"
